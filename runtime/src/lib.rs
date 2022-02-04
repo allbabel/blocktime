@@ -40,8 +40,8 @@ use pallet_transaction_payment::CurrencyAdapter;
 pub use sp_runtime::BuildStorage;
 pub use sp_runtime::{Perbill, Permill};
 
-/// Import the template pallet.
-pub use pallet_template;
+/// Import the Blocktime pallet.
+pub use pallet_blocktime;
 
 /// An index to a block.
 pub type BlockNumber = u32;
@@ -274,8 +274,8 @@ impl pallet_sudo::Config for Runtime {
 	type Call = Call;
 }
 
-/// Configure the pallet-template in pallets/template.
-impl pallet_template::Config for Runtime {
+/// Configure the pallet-blocktime in pallets/blocktime.
+impl pallet_blocktime::Config for Runtime {
 	type Event = Event;
 }
 
@@ -294,8 +294,7 @@ construct_runtime!(
 		Balances: pallet_balances,
 		TransactionPayment: pallet_transaction_payment,
 		Sudo: pallet_sudo,
-		// Include the custom logic from the pallet-template in the runtime.
-		TemplateModule: pallet_template,
+		Blocktime: pallet_blocktime,
 	}
 );
 
@@ -327,6 +326,7 @@ pub type Executive = frame_executive::Executive<
 >;
 
 impl_runtime_apis! {
+
 	impl sp_api::Core<Block> for Runtime {
 		fn version() -> RuntimeVersion {
 			VERSION
@@ -457,6 +457,14 @@ impl_runtime_apis! {
 		}
 	}
 
+	impl pallet_blocktime_rpc_runtime_api::BlocktimeApi<Block> for Runtime {
+		fn current_blocktime() -> u64 {
+			// Return the current block timestamp
+			Timestamp::get()
+		}
+	}
+
+
 	#[cfg(feature = "runtime-benchmarks")]
 	impl frame_benchmarking::Benchmark<Block> for Runtime {
 		fn benchmark_metadata(extra: bool) -> (
@@ -474,7 +482,7 @@ impl_runtime_apis! {
 			list_benchmark!(list, extra, frame_system, SystemBench::<Runtime>);
 			list_benchmark!(list, extra, pallet_balances, Balances);
 			list_benchmark!(list, extra, pallet_timestamp, Timestamp);
-			list_benchmark!(list, extra, pallet_template, TemplateModule);
+			list_benchmark!(list, extra, pallet_blocktime, Blocktime);
 
 			let storage_info = AllPalletsWithSystem::storage_info();
 
@@ -512,7 +520,7 @@ impl_runtime_apis! {
 			add_benchmark!(params, batches, frame_system, SystemBench::<Runtime>);
 			add_benchmark!(params, batches, pallet_balances, Balances);
 			add_benchmark!(params, batches, pallet_timestamp, Timestamp);
-			add_benchmark!(params, batches, pallet_template, TemplateModule);
+			add_benchmark!(params, batches, pallet_blocktime, Blocktime);
 
 			Ok(batches)
 		}

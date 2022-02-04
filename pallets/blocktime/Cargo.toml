@@ -1,7 +1,7 @@
 [package]
-name = "pallet-template"
+name = "pallet-blocktime"
 version = "4.0.0-dev"
-description = "FRAME pallet template for defining custom runtime logic."
+description = "FRAME pallet blocktime to determine lastest block time"
 authors = ["Substrate DevHub <https://github.com/substrate-developer-hub>"]
 homepage = "https://substrate.io/"
 edition = "2021"
